@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Click Counter with One-Time Animated GIF</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Add your CSS styling here */
+  @keyframes moveGif {
+    0% { right: 100%; }
+    100% { right: -100px; }
+  }
+  #gifContainer img {
+    position: fixed;
+    bottom: 20px;
+    right: 100%;
+    animation: moveGif 1s linear; /* 'forwards' makes the end state persist */
+  }
+</style>
+<script>
+let users = {}; // Object to store usernames and their click counts
+
+function setUsername() {
+  const username = document.getElementById("usernameInput").value;
+  if (username) {
+    if (!users[username]) {
+      users[username] = 0; // Initialize click count for new user
+      addUserToTable(username); // Add new user row to the table
+    }
+    document.getElementById("usernameDisplay").innerHTML = "MOSHI MOSHI " + username + " KUN";
+  } else {
+    alert("Please enter your username.");
+  }
+}
+
+function countClicks() {
+  const username = document.getElementById("usernameInput").value;
+  if (username) {
+    users[username]++;
+    document.getElementById(username).innerHTML = users[username];
+    showGif(); // Show GIF when the button is clicked
+    playMusic(); // Play music when the GIF is displayed
+  } else {
+    alert("Please enter your username first.");
+  }
+}
+
+function addUserToTable(username) {
+  const table = document.getElementById("userClickTable");
+  const row = table.insertRow(-1); // Insert a row at the end of the table
+  const cell1 = row.insertCell(0);
+  const cell2 = row.insertCell(1);
+  cell1.innerHTML = username;
+  cell2.innerHTML = users[username];
+  cell2.id = username; // Set the id of the cell to the username for easy access
+}
+
+function showGif() {
+  const gifContainer = document.getElementById("gifContainer"); // Clear the previous GIF
+  const img = document.createElement("img");
+  img.src = "kuru kuru.gif"; // Replace with the URL of your GIF
+  img.style.animation = 'repeat'; // Reset the animation
+  setTimeout(function() { // Trigger reflow
+    img.style.animation = ''; // Re-apply the animation
+  }, 0);
+  gifContainer.appendChild(img);
+}
+
+function playMusic() {
+  const audio = new Audio('kururim.mp3'); // Replace with the URL of your music file
+  audio.play();
+}
+
+</script>
+</head>
+<body>
+<h1>Welcome to KURU!</h1>
+<input type="text" id="usernameInput" placeholder="USERNAME" onblur="setUsername()">
+<p id="usernameDisplay"> "ENTER USERNAME AND PRESS KURU HEHE HAVE FUN!"</p>
+<button onclick="countClicks()">KURU!</button>
+<p id="clickCountDisplay"></p>
+
+<!-- Table to display user click counts -->
+<table id="userClickTable" border="3" style="position: absolute;text-align: center;">
+  <tr>
+    <th>~ USER ~</th>
+    <th>~ SQUISHES ~</th>
+  </tr>
+</table>
+
+<!-- Container for the GIF -->
+<div id="gifContainer"></div>
+
+<!-- Add your audio file in the project directory and link it here -->
+<audio id="backgroundMusic" loop>
+  <source src="kururim.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+</body>
+</html>
